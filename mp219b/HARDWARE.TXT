@@ -1,0 +1,277 @@
+             MODPLAY  *********                            (C) Mark J Cox
+             MODPLAY  **                                        1990/1991
+             MODPLAY  *******                              
+             MODPLAY  **************   
+
+             Amiga four─channel sound module player for PC's
+             Hardware devices for great sound output!
+
+
+    I. CONTENTS
+    ─────────────────────────────────────────────────────────
+
+    How to make:
+                Mono output from a parallel port for about 5 pounds
+                Mono output from a parallel port for around 1 pound
+                Stereo from one parallel port for about 12 pounds
+		A +5v power supply
+		A 22W amplifier
+
+    This document has been supplied with MODPLAY or MODRES and the
+    license agreement attached to the MODPLAY documentation applies
+    to this file.
+
+
+    I. INTRODUCTION
+    ─────────────────────────────────────────────────────────
+
+    MODPLAY will play modules through the PC Speaker as mentioned above, via
+    an D to A converter on any of the three possible parallel ports, in stereo
+    if you have an D to A converter on both LPT1 and LPT2 (this sounds really
+    good) and also through a special board that plays stereo from one
+    printer port ("stereo─on─1")
+
+    1. HOW TO MAKE A D/A CONVERTER FOR FIVE POUNDS
+    ─────────────────────────────────────────────────────────
+
+    A simple circuit for HiFi quality sound needs only a few components (and
+    this circuit will work with other software).   It even sounds better than
+    a Sound Blaster for sampled output!
+
+    You need:
+
+    IC1 a ZN426E (about 3 pounds) (Ferranti or Plessey are UK manufacturers)
+
+    C1 a 10micro-farad electrolytic capacitor (10V or greater)
+
+    C2 a 4.7micro-farad electrolytic capacitor (10V or greater)
+
+    R1 a 380ohm resistor (5%, 1/8W)
+
+    CON1 a phono socket for connecting a lead to your amplifier
+
+    CON2 a 25 way male D-type connector for your parrallel port
+
+    A bit of 10 way cable - or 10 short wires.
+
+    A +5v supply
+
+                               Zn426e    +5V
+    D-type pin no  \          ┌────────┐  │  
+                  (2)  D0  ───┤9     14├──┤
+                  (3)  D1  ───┤10      │ ┌┴┐ 
+                  (4)  D2  ───┤11      │ │ │ 390Ω
+                  (5)  D3  ───┤12      │ └┬┘
+                  (6)  D4  ───┤13     5├──┤
+                  (7)  D5  ───┤1      6├──┤       +
+                  (8)  D6  ───┤2      4├──│────────┤█────> TO AMPLIFIER
+                  (9)  D7  ───┤3   7   │  │        10µF  
+                              └────┬───┘ +╧        (may not be needed)
+                                   │ 4.7µF█  
+                                   │      │  
+                  (25) GND ────────┴──────┴────────────── GND
+                                   
+
+    2. USING A DIFFERENT DAC
+    ─────────────────────────────────────────────────────────
+
+    Lots of people have found that they cannot get the ZN* chips outside
+    the UK - so heres a circuit that will do the same as above..
+    Use a DAC0800 or DAC0801 or DAC0803 from National Semiconductors...
+
+                               DAC 080x   
+   Parallel Port Pin          ┌────────┐0.01µF  0.1µF
+                  (2)  D0  ───┤12    16├──┤█────┤█──────┬─── GND 
+                  (3)  D1  ───┤11      │                │
+                  (4)  D2  ───┤10    15├─────────██████─┘5kΩ 
+                  (5)  D3  ───┤9       │                 
+                  (6)  D4  ───┤8     14├─────────██████─┐5kΩ 
+                  (7)  D5  ───┤7     13├────────────────┤
+                  (8)  D6  ───┤6      2├──┤█────────────┴── +5V
+                  (9)  D7  ───┤5 3 1  4├──────────┤█────> TO AMPLIFIER
+                              └──┬─┬───┘0.1µF    + 10µF  
+                                 └─┤             (may not be needed)
+                                   │        
+                  (25) GND ────────┴──────────────────── GND
+
+    The 0.01uF and 2x 0.1uF   capacitors are Ceramic.  Resistor values
+    not critical
+     
+
+    2. GETTING A +5V POWER SUPPLY
+    ─────────────────────────────────────────────────────────
+
+    Catalogues such as MAPLIN (uk) provide simple circuits for obtaining
+    a +5v power supply (it only has to be 100mA maximum).  Alternatively
+    you could tap +5v off the keyboard connector or use 3 1.5volt
+    batteries (or even 4 1.5volt batteries with two diodes in series to
+    drop the voltage).  In fact, anything that produces a voltage in the
+    range 4.5 ─ 5.5 volts. (in fact you can even tap +5v from the game
+    port).  Don't forget to connect the 0v of your power supply to the GND
+    rail shown.
+
+    Heres a simple circuit for +5v from mains.  Mains voltage is lethal
+    so always get a qualified person to make this if you are unsure.  Make
+    certain that the mains voltage is completely isolated from the computer
+    side and that it is impossible to touch - If you don't want to take the
+    risk then don't make this circuit.
+
+           ┌───────────┐     ≈┌───┐+                  ┌──────┐
+           │           │      │ B ├─────┬───────┬─────┤ 7805 ├────┬────── +5V
+    ───────┤Step down  ├──────┤ R │     │+      │     └──┬───┘    │+
+    Mains  │transformer│ 6V   │ I │    ═╪═ C1  ═╪═ C2    │       ═╪═ C3
+           │to 6VAC    │ AC   │ D │     │       │        │        │
+    ───────┤           ├──────┤ G │     │       │        │        │
+           │           │      │ E ├─────┴───────┴────────┴────────┴────── 0V
+           └───────────┘     ≈└───┘-
+
+    C1     1000 µF electrolytic capacitor            (Circuit from Kenneth
+    C2     0.1 µF  ceramic capactitor                 Aaron, Israel)
+    C3     100 µF  electrolytic capacitor
+    BRIDGE any diode bridge
+
+
+    3. HOW TO MAKE AN EVEN CHEAPER D/A
+    ─────────────────────────────────────────────────────────
+
+    For the price of 20 1% resistors and a plug, with no power supply
+    needed you can make a D/A converter that sounds close to the IC
+    one above (it seems only the UK can get a Plessey ZN426E)
+
+    You need one plug for your amp, one for your parallel port and
+    9 20k and 9 10K resistors
+    Use 1% resistors if possible ─ and 20k sound much better than 22k
+
+          Printer Port:
+
+          signal   pin        20k   20k
+          D0       2      >───░░░─┬─░░░──0v
+                              20k ░ 10k
+          D1       3      >───░░░─┤
+                              20k ░ 10k
+          D2       4      >───░░░─┤
+                              20k ░ 10k
+          D3       5      >───░░░─┤
+                              20k ░ 10k
+          D4       6      >───░░░─┤
+                              20k ░ 10k
+          D5       7      >───░░░─┤
+                              20k ░ 10k
+          D6       8      >───░░░─┤
+                              20k ░ 10k
+          D7       9      >───░░░─┤
+                              20k ░ 10k  100nF
+                                  ├──────┤█────> TO AMPLIFIER
+                                  ░ 10k
+          GND      20     >───────┼────────────>
+                                  0v
+          
+     Thanks to Harry Stox for the above circuit.  Again, make sure all
+     the 0v lines are connected together.  The 100nF capacitor may not
+     be needed, try removing it if this circuit sounds poor.
+
+
+ 
+    4. STEREO-ON-1 BOARD
+    ─────────────────────────────────────────────────────────
+
+    It is possible to play in stereo with only one parallel port (MODPLAY
+    version 2.00 onwards) using the circuit below.  MODPLAY will
+    automatically detect this circuit if it is present and work out what
+    address it is at ─ so you can plug it into any of your parallel ports. 
+    MODPLAY needs no further options and will default to playing through
+    this device.  The +5v supply can be  anywhere between 4.5 and 5.5 volts
+    so it could be run from three 1.5v  batteries. (Or from four
+    rechargable batteries as these are only 1.2v) 
+
+    * Stereo-on-1 works from MODPLAY 2.03 onwards where it did not in 2.00 *
+
+    You can use your stereo-on-1 board with other programs that require
+    a single D/A on the port as follows:
+
+    Find out what address your port is at (LPT1 = 0378, LPT2 = 0278) and
+    add 2 (LPT1 = 037A, LPT2 = 027A).  Go into DEBUG and type
+    o 37a,0       (replacing 37a with the port address)
+    q
+    Then all sound directed to the parallel port will come out of both
+    channels. 
+
+                                ZN428
+                                ┌──────────────┐         390Ω
+              ┌─────────────────┤11           6├─┬────┬─▒▒▒▒▒──+5v
+              │ ┌───────────────┤12           7├─┘    │ 
+              │ │ ┌─────────────┤13           3├NC    │      
+              │ │ │ ┌───────────┤14            │      │  + 10µF
+              │ │ │ │ ┌─────────┤15           5├──────│───╢├─────> Left out
+              │ │ │ │ │ ┌───────┤16            │      │     0v───>
+      20 >─0v │ │ │ │ │ │ ┌─────┤1           10├──+5v │ 
+              │ │ │ │ │ │ │ ┌───┤2            9├─┬─0v │      
+      14 >────│─│─│─│─│─│─│─│───┤4            8├─┘    │    
+              │ │ │ │ │ │ │ │   └──────────────┘      │    
+      11 >────┤ │ │ │ │ │ │ │   ZN428                 │  + 1µF    
+              │ │ │ │ │ │ │ │   ┌──────────────┐      ├───╢├─0v
+       9 >────┴─│─│─│─│─│─│─│───┤11 D7   VRIN 6├──────┘
+       8 >──────┴─│─│─│─│─│─│───┤12 D6  VROUT 7├ NC
+       7 >────────┴─│─│─│─│─│───┤13 D5     NC 3├ NC     
+       6 >──────────┴─│─│─│─│───┤14 D4         │        + 10µF
+       5 >────────────┴─│─│─│───┤15 D3    OUT 5├─────────╢├─────> Right out
+       4 >──────────────┴─│─│───┤16 D2         │           0v───>
+       3 >────────────────┴─│───┤1 D1     +V 10├──+5v    
+       2 >──────────────────┴───┤2 D0     0v  9├─┬0v
+       1 >──────────────────────┤4 !EN    0v  8├─┘
+      25 pin male D connector   └──────────────┘ 
+
+
+      Notes:
+
+      Make sure all the 0v lines are connected together and connected to the
+      0v line of your power source.  Also, make sure the +5v lines are 
+      connected together.  The lines marked 'NC' do not need to be connected.  
+
+      If a ZN428 is not available, any D/A with input latches will work -
+      the D/A should latch the data bus when pin 4 (!EN) is low.
+
+      ─│─ = No connection, ─┼─ = joined
+
+      The above circuit (Stereo-on-1) is (C) Mark J Cox 1991, 29 Lundie Close
+      Stenson Fields, Derby DE2 3AN; and is supplied for personal use only.  
+      For any other use, please contact the author at the address above. If 
+      this circuit is abstracted or incorporated into any other document or
+      circuit then that document or documentation supplied with that circuit
+      must contain this paragraph of text.  Any commercial use where not 
+      agreed by written contract with the author (Mark J Cox) is prohibited.
+
+
+     13. STEREO AMPLIFIER
+     ─────────────────────────────────────────────────────────
+
+     For those of you who have built a stereo DAC and haven't enough
+     inputs to your Amplifier - Kenneth Aaron has supplied this
+     circuit which is designed to give a high power (11W per channel)
+     high quality, low interference, single rail supply amplifier!
+
+      Enable
+     >──────────────┬────────┐   ┌────┬─────────────────────── +12v
+                    │+       │   │    │
+                   ═╪═ 10µF┌─┴───┴────┴─────┐
+           0v ──────┘      │ 7   13   3    1├──────────── Left
+      Left     470nF    ┌──┤4              2├──────────── Speaker
+     >─────────╫────────┤  │                │
+                        └──┤5   TDA 7370  14├──────────── Right
+      Right    470nF    ┌──┤11            15├──────────── Speaker
+     >─────────╫────────┤  │                │
+                        └──┤12              │
+                    +┌─────┤6    8   9    10├─NC
+               47µF ═╪═    └─────┬───┬──────┘
+                     │           │   │
+                     └───────────┴───┴───────────────────────── 0v
+
+     Make sure that 0v of the +12v supply is connected to all the 0v
+     connections on the main circuit.   The enable line has to be tied
+     to +12v to 'switch on' the amp
+
+
+     14. AUTHOR
+     ─────────────────────────────────────────────────────────
+
+     Mark Cox, mark@awe.com

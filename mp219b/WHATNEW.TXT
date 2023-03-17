@@ -1,0 +1,175 @@
+Bugs:  Playing samples through Soundblaster has problems, I've routed them
+       through the speaker for now. (Only a problem when in 's' menu).
+
+	If no MOD is loaded then the scope screen goes mad!
+
+
+***** Coming Soon
+
+o Adlib Gold 9 bit stereo support (this will sound better than the Amiga!)
+o Soundblaster Pro stereo support (this will sound equivalent to the Amiga!)
+o Pro Audio Spectrum/ Tandy DAC/ Ibm PS/1 DAC support.
+
+** New in 2.19b
+
+o Protracker support limited tunes to only 3 octaves - it now detects
+  if you've got any fine-tune bits set and then limits you - otherwise
+  gives the full range (so mods converted from STM format will sound
+  ok!)
+o Lets you look at the samples in an archived module
+o Might work on 8086 8Mhz machines (if you set mixing-speed to 6000)
+o ARJ, ZIP, LZH, ZOO multiple files in archives support!
+o Gif viewer in VGA 320*200*256 mode
+o Graphic scope over a Gif file when playing on VGA
+o Config file support - have a look at MODPLAY.CFG
+o New output device - Quadrophonic DAC - /xq
+o Tags are brighter
+o New help in sample menu - filenames default to .SAM
+o Pressing C while playing lets you change output device
+o New command line option, 
+  mp /q=c:\dos\command.com kyliemix
+  Will start the mod playing in the background whilst exectuting the 
+  program name given.
+o When exit MP it reverts to the directory/drive you started it in
+
+** New in 2.10
+
+o Fixed mp/o display of ZIP files
+o Fixed Soundblaster Detect routines
+o Fixed sample playback through user defined D/A board
+o Global volume contol (F11/F12) and channel toggle (1,2,3,4)
+o Fixed Tone Portamento at last (Thanks U4IA!)
+
+** New in 2.09B
+
+o Fixed Help display F1 when playing a mod.
+o Protracker compatible - thats an extra 20 commands!
+o Started using a source code control system (about time too!) so mp /v 
+  now lists status and version numbers of all source files.  MODRES has
+  got a little big now though (>14k) and looks to get larger!  I've
+  thought of a way to halve the size, and may get around to implementing
+  it this christmas.
+o Partly fixed >40 bug.  Now loads em - but wont play extended patterns
+o Added processor speed detect (initially - type MP /v)
+o Finally fixed Stereo-on-1 totally. thats it. no more!
+o Protracker command - Sample offset =9 - useful for Sampled Annie!
+
+** New in 2.05
+
+o Added Spectrum Analyser mode (try F7/8/9/10)
+  Its a REAL SPECTRUM ANALYSIS - not one of these fake ones you find on other
+  trackers - try playing a speech wave and you will see what I mean. 
+o Got rid of cursor in top left of screen
+o Fixed Stereo-on-1 port that did not work on some machines 
+o Test of Disney output
+o In sample menu, F1/F2/F3 change octave and 1,2,..6 play sample at 
+  any pitch. (1=C, 2=D etc)
+o Fixed Volume slide (was ignored)
+o New directory routine - faster scanning, only 1 pass!
+o PGUP/DN now correct way round! 
+o New help when playing a file
+o Displays program information by pressing 'v'
+o New routines that look at BIOS to find the address of your parallel port
+  Now should work with non-standard addresses.  New command line options
+  to select these new devices.
+o Detects modules compiled with MODEDIT v1.20 onwards.
+o Tagged modules play in order tagged.
+
+** New in 2.00
+
+o New 's' menu now lets you play with 31st sample (bug fix)
+o Now sorts directory into alphabetical order
+o Displays size of archives.
+o New Help pop-up
+o New 'C' change output menu-type display with mouse support
+o Allowing Shareware places to distribute MODPLAY at their usually large
+  prices.  I don't agree with this really, its just as lots of people have
+  said they cannot get MODPLAY easily.
+o Fixed bug that meant MP2.00ß would crash if you didn't have a SBlaster and
+  you had two printer ports (or your name was John).
+
+** New in 2.00ß (CIX/GREY/REL)
+
+o Can tag ZIP files.
+o DABS PRESS provided Soundblaster board.  Now with full soundblaster
+  support and autodetection of base address.
+o Got rid of MP128, MP now handles these modules itself.
+o Plays samples over 64k from sample menu
+o Have up to 1000 modules in a directory!
+o Now writes out sample in correct format for MODEDIT ('s','w')
+o F1 and F2 alter character of moving bars when playing
+o F3 and F4 alter the colour of the moving bars
+o -dxx option where xx is hex of character you want as moving bars.
+o Playing a mod when in sample mode ('s','m') now displays bars
+o PAGEDOWN skips a track backwards, HOME to the start of the song and
+  END now is the pause key
+o Doesnt crash if you switch out of turbo mode.  Will run on 8Mhz machine
+  but sound sloooowww.
+o Page numbers greater than 10 now work.
+o Autodetects and support for 'stereo-in-1' board
+o Partial mouse support, lets you change dir, play and page up/down only
+o Now displays a 'o' for each archive as well
+o OOpps - if you only had .ZIPs in your dir it would find only the first
+  25. Fixed. 
+o Added support for 4 track Startrekker modules as these looked like normal
+  modules but crashed on playback. (Ghostbust.mod, dots.mod)
+o Volumes >128 (illegal) were rounded to 0 when they should have been
+  rounded to MAX_VOLUME, only noticable in MCHAMMER.MOD 
+o Added new key - PageUp skips a complete track
+o Fixed bug in Vibrato command (oops!)
+o New key - PageDn pauses (almost). Start again with down cursor
+
+** New in 1.35
+
+o New key 'd' lets you delete a module or archive (with confirmation)
+o Arpeggio didn't work at all! it sounded really wierd on some mods - have
+  now fixed it!
+o Included a second file that will play modules with samples in them that
+  are >64k - this program will only work on machines 16Mhz or faster for the
+  time being.
+o ! Shell now looks at COMSPEC.  Can now play ZIP and LZH archives of
+  modules (archive must contain only one file with a .MOD extension
+  example - LVBRAIN.ZIP containing LVBRAIN.MOD).  two files must be
+  present on your path, LHA and PKUNZIP which are called to
+  unarchive your modules (these can be batch files)
+
+** New in 1.30
+
+o If large screen resolution now displays all help on right hand side
+  of screen, more room for more mods.
+o Added support for >25 row video modes
+o Moving up from first page now positions on correct place on last page
+o Now works out looping properly 
+o Full Herc screen support
+o Can now play individual samples after pressing 's' by pressing 'p'
+o Can now 't/u' tag/untag modules ('T/U' tags/untags all) and then 'p' play
+  all tagged files.
+
+** New in 1.16e
+
+o Can now move around directories
+o MP * now stops looping modules looping, whilst they play as intended
+  in interactive mode
+o Now gives estimated time display for each module
+o /o option for cataloging modules
+o User definable output port for Mono and/or Stereo mode (for people
+  with D/A's on a PC bus card).
+o Does not crash if it finds more than 500 modules in a directory
+o Module file sizes are now displayed
+o Elapsed time display when playing a module
+o Displays filename of Module playing in multi-play mode (MP *)
+o OOOOppps! Someone just pointed out that modules are either 15 or 31 (not
+  30).. Modplay now will play all 31 samples.
+o Full screen display of playing samples
+o Resets time from RTC at end of tune
+o /v compiled version information
+o Special keys to alter speed of playback
+o Command line option for people with slower/faster machines
+o Crashes less often on slower machines.
+o Will play multiple files from the command line.
+o Added Playing through LPT1 and 2 in mono mode, so I can listen to modules in
+  mono without it only coming out just of one of my speakers.
+
+** New in 1.12
+
+o First public release of MODPLAY.  

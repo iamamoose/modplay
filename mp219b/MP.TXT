@@ -1,0 +1,544 @@
+
+     MODPLAY PRO *********                            (C) Mark J Cox
+     MODPLAY PRO **                                        1990/1991
+     MODPLAY PRO *******                              
+     MODPLAY PRO **************                         Version 2.19b
+
+     Play AMIGA 4 channel sampled music files on a PC 
+    
+
+     I. QUICK START
+     ─────────────────────────────────────────────────────────
+
+     If you are impatient and don't want to read all the documentation before 
+     trying this program, type:
+
+                mp        
+     or         mp -a-i   If your machine is 10Mhz - 12Mhz
+
+
+     II. EXTRA INFORMATION
+     ─────────────────────────────────────────────────────────
+
+     1          If your video card supports text modes such as 25*132,
+                44*132, 60*132 or just about any other text mode then enter
+                this mode (using the utility supplied with your card) and
+                MODPLAY PRO will take full advantage of it when selecting 
+                filenames
+
+     2          Modplay Pro now has full PROTRACKER support.  See a later 
+                section for details.  MODPLAY can execute your programs
+                while playing mods - see section 3.1
+
+     3          The Modplay config file must exist in one of two places
+		i)  The current directory
+		ii) The directory in which the copy of MP.COM you are running
+		    is in.
+  
+     4          Modplay Pro will now view .GIF files including GIFs that have
+                been GIFLITE'd and GIF89's.  The last .GIF file viewed will be
+                used as the background to the VGA scope display (F10 when
+                playing).  No support for Interlaced GIF's.
+  
+
+     III.  INTRODUCTION TO MODPLAY PRO
+     ─────────────────────────────────────────────────────────
+
+     Modplay Pro allows you to play Amiga soundtracker/noisetracker files,
+     Protracker files and even 4 channel Startrekker files on a PC 
+     (10Mhz or faster clock speed, 286 processor or better).  
+     Modplay Pro is written *entirely* in assembler and now runs to over
+     11,000 lines of source and has taken around 400 hours to produce.
+
+     *** DOES NOT ALWAYS WORK WHEN USING emm386 ON A 386 PC ***	
+
+
+     1.   WHAT ARE MODULES?
+     ─────────────────────────────────────────────────────────
+
+     A module consists of 15 (or 31) sampled instruments and a four channel
+     music track.  By playing the instruments at different pitches a
+     soundtrack lasting many minutes can be produced.  The PC speaker is not
+     really up to handling modules, since in total we have a 10 bit sample
+     to be played, and the speaker can only handle 5 (and thats only just
+     possible).  A D/A converter gives 8 and the stereo version gives 
+     effectively 9. The output sounds OK through a good sized PC speaker, the 
+     cheap piezo devices found in some computers including laptops are not 
+     really designed to cope.  So through external hardware MODPLAY PRO comes 
+     close to the quality you would get on an AMIGA.
+
+
+     2. IMPLEMENTATION
+     ─────────────────────────────────────────────────────────
+
+     MODPLAY PRO implements all Amiga effects such as vibrato etc.
+     Most Amiga modules have samples in them that are less than 64k each in
+     length, these can be played as normal on any 286 10Mhz or better;  a
+     rare few have samples >64k in them and although these will be played
+     by modplay pro you really need a 16MHz machine minimum to keep up.  These 
+     modules are marked with a '*' on the top line of the display next to the
+     filename when they are playing.
+
+     2A. PROTRACKER
+     ─────────────────────────────────────────────────────────
+
+     On the Amiga there are a wide variety of tracker players.  By far
+     the best (personal opinion) is the Protracker player.  Protracker
+     modules can have many more commands in them (Thinks like Tremelo,
+     Note delays,  Repeat loops,  etc)  and I have recently found many
+     modules are Protracker ones and so benefit greatly by implementing
+     this new set of commands.  All Protracker commands execept FunkInvert
+     (EFx) are implemented (FunkInvert just plays a sample sort of
+     backwards... this would mean changing my interrupt routines a little
+     too much and would slow down normal songs)
+
+
+     3. MODPLAY PRO OPTIONS - COMMAND LINE PLAYING
+     ─────────────────────────────────────────────────────────
+
+     From the command line a module can be played through any of the output
+     devices with or without a moving graph display.  The format is 
+
+     MP [-q] [-0..6] [-a/-b] [-output device] [filename [.MOD]
+ 
+     Items in [ ] are optional.   The -q if present tells MODPLAY PRO not to
+     display any text and so the module will play without disturbing the
+     text display.  (You could use this in a game's title screen written
+     in C or Basic, by doing a system or shell command - MODPLAY PRO exits when
+     a key is pressed).  The -(number) tells MODPLAY PRO what hardware to play
+     the module through.  The filename can contain wildcard characters
+     (*,?), so MP * would be valid and would play all the *.MOD files
+     in the current directory one after the other.  Playback of a sequence
+     of files can be aborted by pressing ESCape two or three times in rapid
+     sucession.  
+
+     -0  is the PC Speaker (default unless a stereo-on-one card is found)
+     -l1 is a D/A converter on printer port 1
+     -l2 is a D/A converter on printer port 2
+     -l3 is a D/A converter on printer port 3
+     -l4 is a D/A converter on printer port 4
+     -ls is 2 D/A converters, one on port1 the other on port2 (gives stereo)
+     -lm is 2 D/A converters as above but giving mono.
+
+     -xm
+       This is of use if you have a single D/A converter on an expansion
+       port or any known address.  Use -xm(address) where the address is
+       a 3 digit hex number.  (Example -xm3B7 would play in mono to a
+       D/A converter at address 03B7) 
+    
+     -xs
+       This is similar to -xm, allowing two D/A converters and hence stereo
+       operation.  Use -xs(address1)(address2).  [Example, -xs300301 would
+       play in stereo to D/A converters at 0300 and 0301.  Note that these
+       switchs must be used from the command line and cannot be changed when
+       inside MODPLAY PRO
+
+     -xq 
+       Similar to -xs, allowing four D/A converters - this gives the Best
+       possible quality!  But it may not work too well on slower computers.
+       Use -xq(address1)(address2)(address3)(address4) [ Example
+       -xq3003BC2F93DC would play to D/As at 0300, 03BC, 02F9 and 03DC.]
+       As with -xs, all the addresses must be different!
+
+     -y1 (-y2,...-y4)
+       Disney Sound Source D/A.  This output routine is designed to drive
+       the Disney D/A converter (that is supplied with some games etc.).  The
+       Disney D/A sits on a parallel port but must be clocked after each
+       sample (unlike the standard D/A in hardware.doc) and turned on and off.
+       -y1 would output to a Disney D/A on LPT1, -y2 on LPT2 etc.   A normal
+       D/A converter on a parallel port will work with this option as well,
+       although it is not recommended as it is more processor intensive.
+
+     Stereo-on-1
+       Modplay Pro will autodetect a Stereo-on-1 board on any Parallel port and
+       use it.  See HARDWARE.DOC for more information
+
+     Soundblaster
+       Modplay Pro will autodetect a Soundblaster card at any base address and
+       use it. 
+
+     (Using a /number will ignore anything autodetected).
+
+     -a should be used if your computer crashes when playing tunes, it
+        decreases the rate of playing samples - decreasing the quality
+        noticably through the speaker, but should mean 10Mhz-12Mhz machines
+        can cope.
+     -b This is the default mixing speed designed for a 12MHz PC
+
+     -d This option is used when if you don't like my choice of character 
+        for drawing the bars.  I've had lots of mail all saying you would
+        like different characters - so now you can choose your own,
+        Usage is -dxx where xx is a two-digit hexidecimal number of the 
+        character you want to use,
+
+        -dF0    Would be ≡, the old MODPLAY default bar
+        -df7    Would be ≈, one of my favorites
+        -d02    is quite fun for 'acid house' type mods. 
+
+        And if you are still not satisfied, then pressing F1 or F2 when
+        playing changes the character as well!  F3 and F4 even change the
+        colour of the moving bar.  Hours of fun (yawn)!
+
+        -z      Using the -z switch somewhere on the command line will
+                make modplay not check inside archive files - this will
+                speed things up a bit if you have lots of non-mod archives
+		in your directories
+
+     Playing is stopped by pressing *any* key, or when the module is finished
+     Modules that loop at the end, or jump backwards are stopped so they
+     will only play once.
+
+     There are some special keys, described in the next section that can
+     be used to whiz through a module like a CD player.
+
+
+
+     3.1 MODPLAY PRO IN THE BACKGROUND
+     ─────────────────────────────────────────────────────────
+
+     It is now possible to make MODPLAY play your mod whilst executing
+     any other program!  So you could use it in demos etc.
+
+     Given a program you wish to run, say c:\bin\demo.exe, with a module
+     in the current directory of, say sausage.mod then
+
+     mp (other options) /q=c:\bin\demo.exe sausage.mod
+
+     Will start your program running.
+
+     One possible error message 'Could not shell to DOS' may appear. In
+     the future this will be more helpful and say if it is either
+     a) Out of Memory or
+     b) Could not find c:\bin\demo.exe ..etc..
+
+     Playing a MOD takes up quite a bit of CPU time, so to compensate
+     the MOD mixing speed is dropped by about 6kHz.  This means that
+     speaker output will sound a bit 'off'.  If you need more CPU time
+     for you task then use the /a option before the /q.
+
+
+     4. MODPLAY PRO IN INTERACTIVE MODE
+     ─────────────────────────────────────────────────────────
+
+     MP on its own or MP [options] -i will bring up a display menu screen
+     help on all key presses is available by pressing F1.   From this screen 
+     you can change directory, change drive or play one or more modules.
+
+     The commands allowed are:
+
+     Basic Keys:
+
+
+     Cursor Keys Move the highlight bar together with the 'PgUp',
+                 'PgDn', 'Home' and 'End' keys.
+
+     <SPACE>or   This will play the current module highlighted, or change
+     <RETURN>    to the directory or drive hightlighted
+
+     <ESC>       Quits modplay Pro
+
+     <c>         Brings up a menu showing all the possible output devices.
+                 Lets you move around them using the arrow keys and select
+                 one by pressing SPACE or RETURN.
+
+     <v>         Displays information about MODPLAY PRO
+
+     <!>         Lets you perform DOS commands.
+
+     <d>         Deletes the highlighted module after confirmation
+  
+     Advanced:
+
+
+     <t>         Tags the currently highlighted module (displays a "+")
+                 or untags the module if already tagged.
+
+     <T>         Tags all modules in directory
+
+     <U>         Untags all modules in directory
+
+     <p>         Plays all tagged modules in sequence.
+
+     <s>         Takes you into the Sample sub-menu screen
+
+     <v>         Displays program compiled date and version information
+     
+
+     Sample Sub-menu:
+
+
+     From here you can look at the samples that make up the module - there
+     are a few special keys that perform various functions that are not
+     fully tested and are provided for users that know what they are
+     doing (i.e. not bomb proof input routines!)
+
+     <p>         Plays the sample highlighted
+
+     <m>         Plays the whole module
+
+     <w>         Prompts for a filename and then saves the sample to disk
+
+     <r>         Reads a new sample into the old slot.
+
+     also, you can play any sample at any pitch you like.  Pressing
+     F1, F2, F3 change which octave you are playing in (low, mid, high) and
+     then the number keys play the sample.  1=C, 2=D, 3=E, 4=F, 5=A, 6=B.
+ 
+
+     5. PLAYBACK KEYS
+     ───────────────────────────────────────────────────────── 
+
+     During any playback, pressing the left arrow key will slow the music
+     down, the right arrow key will speed it up and the down arrow key
+     restores to default speed.  The PageDown key will skip to the next
+     track, PageUp jumps back one track.  The END key will (almost)
+     pause the music, with the down arrow key restoring the speed.
+     The F1 key toggles help which lists all the keys currently available.
+
+     The F8 key turns on the Spectum Analyser display (with bars)
+         F9 key turns on test mode
+         F10 key turns on the Spectrum Analyser display (no bars)
+         F7 key goes back to the old flashing blobs.
+
+         +     Decreases the total volume of this and future mods
+         -     Increases the volume of this and future mods
+         1     Toggles channel 1 on/off (Similarly 2,3,4)
+	 s     Shells to DOS whilst still playing
+     
+     6. SPECTRUM ANALYSER
+     ─────────────────────────────────────────────────────────
+
+     Hey!  Seen those so-called spectrum analysers on other trackers?
+     They are not real!   If you look closer at 'Tr**ster' then you
+     will see that this is really just showing the pitch of the notes
+     being played... others cheat in a similar way.   MODPLAY PRO has a
+     real 32 point Fourier Transform.   Okay, so there are a few bugs,
+     but there is no other PC tracker with a ***REAL*** Spectrum!  If you
+     want to test this out - try playing a speech sample on a single
+     channel.  All other trackers just display a peak at one frequency 
+     (the pitch you are playing it at).  MODPLAY PRO actually displays the
+     frequency components of the sample.
+
+     a)  If your machine is a bit slow then it can't keep up and it
+         will leave the odd red bar on the screen.  Just press F8 to
+         get rid of them
+
+     b)  Yeah, its a linear frequency axis - okay it should be logrithmic
+         but there is no simple formulea to get this to work - so you'd
+         need a dedicated DSP chip.
+
+     c)  It'll be in graphic mode very soon.
+
+          ║                         
+          ║                       If you see any other trackers with a 
+          ║                       similar display - they probably 
+          ║ █                     copied the code (let me have a copy
+          ║ █   █        █        and I will see if they did!)
+          ╚═╤═══╤════════╤
+     500Hz──┘   │        │
+     1kHz───────┘        │
+     ...                 │
+     8kHz────────────────┘
+
+
+     7. LISTS OF MODULES
+     ─────────────────────────────────────────────────────────
+
+     If like me you have hundreds of modules spread over many disks you
+     may find the -o option useful.  This option writes out a list of
+     mods in the current directory to the screen which can be redirected
+     to a file.   Example:
+
+     A:\> mp -o > c:\mod\list\disk21.lst
+
+     Would create a file c:\mod\list\disk21.lst with the contents similar to:
+
+     AXELF.MOD           axel f                   15    83   110k     10:24
+     FCMEDINA.MOD        funky cold medina        31    31   229k     01:56
+     HUMANINV.MOD        human invasion           31    26   197k     03:15
+     KYLIEMIX.MOD        kyliemix                 15    15    59k     01:52
+     SJUNGLE.MOD         street jungle            31    45   135k     05:38
+     THEMODEL.MOD        the model                31    28    74k     03:30
+
+     Number of Samples in the MOD (15/31)  ───────┘     │     │       │
+     Number of patterns in the MOD (1..127) ────────────┘     │       │
+     File Size ───────────────────────────────────────────────┘       │
+     Estimated playing time (correct about 70% of the time) ──────────┘
+
+
+     8. VERSION
+     ─────────────────────────────────────────────────────────
+ 
+     The -v flag displays automatic information about your version of MODPLAY.
+     It will show the main version number and the exact date/time it was
+     compiled, for example:
+
+     C:\> mp -v
+
+     Program        : SUPER MODPLAY PRO GOLD + (MP-LITE.COM) 
+     Version        : 314.15  (October 1997)
+     Compiled on    : 09-02-1997 at 20:30:58
+     Compiled by    : Mark Cox
+
+     It now also gives an estimate of your machine speed (for use in
+     later versions to alter the mixing speed)  and also dates and versions
+     of all my source code modules.
+
+
+     9. ARCHIVED MODULES
+     ─────────────────────────────────────────────────────────
+
+     Using a popular archiving utility normally saves about 30% of disk space
+     for modules.  Support is now added so that MODPLAY PRO will automatically 
+     find and play modules stored in archives (in interactive mode only at
+     present).    Modules can be archived into LZH ZIP ARJ or ZOO format and
+     there can be more than one MOD file per archive. (Modules in archive must
+     have .MOD or .NST extension)
+     MODPLAY PRO runs your unpacker for you, creating the .MOD file 
+     temporarily on your hard disk; plays the .MOD file then deletes it.  
+     MODPLAY PRO needs unpackers with the following names (or batch files
+     with these names) somewhere on your path.
+
+     ZIP:          pkunzip                   ARJ:           arj
+     LZH:          lha                       ZOO:           zoo
+
+
+     10. SOURCE OF MODULES
+     ─────────────────────────────────────────────────────────
+
+     You can obtain modules from many Bulletin Boards,  Internet sites or from
+     friends Amiga's.  Modules usually come archived in LZH form, these can be 
+     unpacked with the excellent LHA program.  The files will usually unpack 
+     as 'mod.something' and so MSDOS cuts them short to 'mod.SOM' and it is 
+     best to rename these to 'something.mod' so that MODPLAY PRO will 
+     automatically detect them.
+
+     The site:  ab20.larc.nasa.gov   contains lots of really good mods in the
+     /incoming/amiga/NoiseTracker/U4IA  directory.
+
+
+     11. FREEWARE
+     ─────────────────────────────────────────────────────────
+
+     This software is Freeware - that means that there is no registration fee,
+     you can copy this software, give it to anyone, and use it for anything 
+     (subject to the license at the end of this document).  Why use Shareware
+     trackers?
+
+
+     12. CREDIT & THANKS DUE TO:
+     ─────────────────────────────────────────────────────────
+
+     DABS PRESS           - For providing a Soundblaster Board that enabled 
+     Manchester, UK         MODPLAY to finally work with it!     DABS PRESS
+     061-773-8632           supply PC's and peripherals including Soundblaster  
+                            boards  at  excellent prices.
+     Lars "Zap"           - A Protracker replay routine that gave details of
+                            the extra commands and how to implement them.
+     Mahoney & Kaktus     - A Noisetracker replay routine!
+     Francois Jalbert     - Many many many Email messages about Modplay, and
+                            providing moral support and French and German
+                            translations - cheers Franky!
+     Norman Lin           - Who pointed out a few mistakes in my implementation.
+     Paul Sutton          - GIF decoder and Config file reading routines
+     Steven Groundwater   - Help with VGA inc 'scope & text & bars.
+     Derek Beacroft       - For obtaining the Soundblaster programming info.
+     Patric Aalto         - A great Soundblaster autodetect utility
+     U4IA (Jim Young)     - For some great Protracker Mods and for checking
+     32 Ingleside Road      the Protracker extensions.  Write to him if you 
+     Kingswood, Bristol,UK  want an orignal MOD for your demos or games.
+     A.N.Other            - Your name could be here if you can find out the
+                            programming details of Adlib Gold etc.
+
+     And the other (now over 300) people who have commented on MODPLAY and
+     given ideas for the future. 
+
+
+
+     13. COPYRIGHT/LICENSE/WARRANTY
+     ─────────────────────────────────────────────────────────
+
+     This license agreement applies to the version of Modplay or Modplay Pro
+     that accompanies this document.
+
+     The files MP.COM, HARDWARE.DOC, WHAT.NEW and this document MP.DOC 
+     ("the software") are copyrighted by the author (Mark J Cox). 
+     The copyright owner hereby licenses you to:  use the software; 
+     make as many copies of the program and documentation as you wish; 
+     give such copies to anyone; and distribute the software and  
+     documentation via electronic means.  This means that as a company 
+     you could put MODPLAY PRO on any of your PCs or Networks freely.
+    
+     You are specifically prohibited from charging, or requesting donations,
+     for  any such copies, however made; and from distributing the software
+     and/or  documentation with commercial products without written
+     contract from the author (Mark J Cox).
+    
+     This software may be distributed in Shareware/Public Domain libraries
+     that charge for copying and distributing disks.
+    
+     ║ No Copy Of The Software May Be Distributed Or Given Away Without   ║
+     ║ This Document; And Neither The Program Or Document May Be Altered  ║
+     ║ In Any Way, Or Reverse-Engineered By Disassembly Or Other Method.  ║
+    
+     There is no warranty of any kind, and the copyright owner is not liable
+     for damages of any kind.  By owning/using this software, you agree to 
+     all the above terms.
+    
+     The software, documentation and diagrams are  
+     Copyright (C) 1990/1991 by Mark J Cox
+
+
+     14. FREQUENTLY ASKED QUESTIONS LIST
+     ─────────────────────────────────────────────────────────
+     
+     These are a selection of comments/suggestions and questions I have
+     received.
+
+     Q. I keep getting 'Divide Error' and my computer locks up
+     A. Some modules I have seen are corrupt - there is no way MODPLAY can 
+        tell and there is no time to do any checks - use the 's' command and
+        you should be able to see if the module has any garbage in it.
+
+     Q. It sounds like my computer is about to explode.
+     A. You have a small piezo speaker - why not build a resistor D/A as
+        explained above or put a nice sized speaker (Radio Shack/Tandy) in
+        instead.
+
+     Q. Can I edit modules?
+     A. Not with MODPLAY PRO - use MODEDIT v2 written by Norman Lin that uses
+        MODRES a resident version of MODPLAY
+
+     Q. Ever thought of supporting 8 channels like 'Startreker'?
+     A. Yeah, but you would need a 20Mhz+ to run it...and I haven't found
+        enough modules that support it yet though.
+
+     Q. Can I have the source? Please?  Pretty please?
+     A. No!
+
+     Q. I can't find this ZN426E chip
+     A. Try MAPLIN otherwise you could always substitute any D/A or use the 
+        resistor version
+
+     Q. I sent mail to you three years ago!
+     A. It takes a while for my mail to be forwarded on to me, and I don't
+        have an enormous amount of time to answer Email etc.  I'll try to
+        reply to everything I receive (if you can wait a bit!)
+
+     Q. "Speech on the IBM PC is not just a case of 'yet another Lotus-1-2-3'
+         but a basic piece of innovative software which is being incorporated
+         into several commercial products at this very moment.  Releasing an
+         un-supported non-commercial product of this nature is a highly 
+         irresponsible act which we cannot stand by and watch without doing our
+         utmost to prevent" - A UK company talking about the PLAY program.
+     A. (I'll let you make your own answer up, send me your favourite)
+
+
+
+     15. CONTACT/SUPPORT
+     ─────────────────────────────────────────────────────────
+
+     Mark J Cox, mark@awe.com
+
+$Header: M:\RCS\MP.DOC 1.5 91/12/24 12:56:27 ROOT_DOS Exp Locker: ROOT_DOS $
+

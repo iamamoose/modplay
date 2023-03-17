@@ -1,0 +1,272 @@
+                         _ __    _    __   _    ,
+                          )  ) _//   /  ) ' )  /    Amiga module player
+                  M O D  /--'  /    /--/   /  /     for a 10Mhz or faster
+                        /     /___ /  (_  (__/_     IBM compatible PC
+                                           //
+                         Version 1.10     (/        (C) Mark J Cox 1991
+
+____________________________________________________________________________
+Contents:
+                o What are modules
+                o How to use MODPLAY
+                o How to get modules & contact author
+           and  o How to make a D/A converter for 5 pounds
+                  that works with MODPLAY, PLAY and other software
+____________________________________________________________________________
+
+Introduction
+------------
+
+    Modplay allows you to play (most) Amiga soundtracker/noisetracker files
+    on a PC (10Mhz or faster clock speed).  CGA minimum is required for the
+    graphical display whilst playing, but no display at all is required
+    just to play modules.  MODPLAY detects automatically if a module is
+    corrupt, and detects if it is a 15 or 30 instrument module.
+
+What are Modules?
+-----------------
+
+    A module consists of 15 (or 30) sampled instruments and a four channel
+    music track.  By playing the instruments at different pitches a
+    soundtrack lasting many minutes can be produced.  The PC speaker is not
+    really up to handling modules, since in total we have a 10 bit sample
+    to be played, and the speaker can only handle 5 (with difficulty!).  A
+    D/A converter gives 8 and the stereo version gives effectively 9.
+
+Implementation:
+---------------
+
+    MODPLAY implements all Amiga effects such as volume sliding, vibrato etc.
+    except for the looping which, although implemented as described in 
+    Soundtracker v3.0 (plays all the sample first, followed by the loop
+    the rest of the time) does not seem to work with some modules. (See bugs
+    section)
+
+Instructions:
+-------------
+
+    There are two ways of using MODPLAY - the first from the command line and the
+    second in 'interactive mode'
+
+    Command Line:
+    -------------
+
+    From the command line a module can be played through any of the output
+    devices with or without a moving graph display.  The format is
+
+    MODPLAY [/q] [/0..5] filename [.MOD]
+
+    Items in [ ] are optional.   The /q if present tells MODPLAY not to
+    display any text and so the module will play without disturbing the
+    text display.  (You could use this in a game's title screen written
+    in C or Basic, by doing a system or shell command - MODPLAY exits when
+    a key is pressed).  The /number tells MODPLAY what hardware to play
+    the module through
+
+    /0 is the PC Speaker
+    /1 is an D/A converter on printer port 1
+    /2 is                  on printer port 2
+    /3 is 2 D/A converters, one on port1 the other on port2 (gives stereo)
+    /4 is 2 D/A converters as above but giving mono.
+    /5 is a D/A converter on printer port 1 (thats on a video card)
+    /6 is a prototype board
+
+    These are explained in more detail later on.
+
+    Playing is stopped by pressing *any* key, or when the module is finished
+    (some modules loop around to the beggining again and so never finish)
+
+    Interactive:
+    ------------
+
+    Typing MODPLAY /i will scan the current directory for all module file. 
+    These are then displayed in a list.  The cursor keys, PgUp, PgDn, Home
+    and End allow you to select a module;  the 'c' key alters the destination
+    of the sample (like /0,/1.. above); the 's' key displays the samples that
+    make up the module; ESC key exits and pressing SPACE or RETURN will play
+    the highlighted module.
+    
+Source of Modules:
+------------------
+
+    There are many sources, Including myself.  Modules usually come archived
+    in LZH form, these can be unpacked with the LHARC program which can be
+    found on most MSDOS BBS's.  The files will usually unpack as 'mod.something'
+    and MSDOS cuts them short to 'mod.SOM' and it is best to rename these to 
+    'something.mod' so that MODPLAY will automatically detect them.
+
+Speaker Routines:
+-----------------
+
+    The PC Speaker routines I used in PLAY and RESPLAY were not good enough for
+    MODPLAY.  PLAY and RESPLAY worked by linearly assigning the 64 different
+    waves the speaker could produce to the 256 levels of sample.  Most of
+    MODPLAYs information is in the middle 30 or so levels, as its not very
+    often that all the four channels are at maximum volume together.  So I
+    have designed a new logarithmic table - this means that the sound will be
+    a little wierd from the speaker, but it is better than it was with the
+    PLAY algorithm.
+
+Supported Hardware:
+-------------------
+
+    MODPLAY will play modules through the PC Speaker as mentioned above, through
+    an D to A converter on any of the three possible parallel ports, in stereo
+    if you have an D to A converter on both LPT1 and LPT2 (this sounds really
+    good) and also through a prototype board (currently in development by
+    a friend - stereo replay and sampling).  
+
+How to make a D/A converter for five pounds:
+--------------------------------------------
+
+    A simple circuit for HiFi quality sound needs only a few components (and
+    this circuit will work with lots and lots of other software)
+
+    You need:
+
+    IC1 a ZN426E (about 3 pounds)
+    C1 a 10micro-farad electrolytic capacitor (10V or greater)
+    C2 a 4.7micro-farad electrolytic capacitor (10V or greater)
+    R1 a 380ohm resistor (any sort)
+    CON1 a phono socket
+    CON2 a 25 way male D-type connector (for your parrallel port)
+    A bit of 10 way cable - or 10 short wires.
+    1 roll of double sided sticky tape (how'd that get there?)
+    A +5v supply
+
+    Connect the following pins of IC1 to the numbered pins of CON2 (should
+    be numbered on the socket).  
+
+    IC1 - CON2      IC1 - CON2
+    3     9         12    5
+    2     8         11    4
+    1     7         10    3
+    13    6          9    2
+
+    Connect 0v of your power supply to pin 25 of CON2, the ground connection
+    of CON1, pin 7 of IC1 and also the -ve side of C2.
+
+    Connect +5v of your power supply to pin 14 IC1 and one end of the resistor
+
+    IC1 pin 5 and 6 are joined together and also to the +ve side of C2 and the
+    other end of the resistor.  
+
+    IC1 pin 4 is connected to the +ve side of C1, the -ve side being connected
+    to the centre connection of the phono socket CON1.
+
+    Every pin except pin 8 of IC1 should now be connected somewhere. Connect
+    a +5v power supply, attach to a parallel port and plug in your amplifier
+    to the phono socket.
+
+    Filter?
+    -------
+
+    Usually you would put a filter, buffer and amplifier after the D/A
+    converter - but I have had no problems without and it sounds great to
+    me.
+
+    Getting a +5v power supply
+    --------------------------
+
+    Catalogues such as MAPLIN (uk) provide simple circuits for obtaining
+    a +5v power supply (it only has to be 100mA maximum).  Alternatively
+    you could tap +5v off the keyboard connector or use 3 1.5volt
+    batteries (or even 4 1.5volt batteries with two diodes in series to
+    drop the voltage).  In fact, anything that produces a voltage in the
+    range 4.5 - 5.5 volts.
+
+Freeware:
+---------
+
+    This software is Freeware - that means that there is no registration fee,
+    you can copy this software, give it to anyone, and use it for anything 
+    (subject to the license at the end of this document).  If you like this
+    software, and would like the author to continue writing a gift would be
+    appreciated.  For gifts of 10 UK pounds or greater I will send a package
+    of the full circuit diagrams for sampling as well as the playback mentioned
+    here,  printed documentation for PLAY, RESPLAY and MODPLAY and two disks
+    with Samples and the latest versions of the programs.
+    
+    If you want to save the hassle of downloading modules, I have (at present)
+    nearly 5Meg worth.  If you wish me to send you one, or more disks please
+    enclose a gift of:  2 pounds post and packing (non-UK 3 pounds) and then
+    1 pound for each High Density disk you require.  Or send an SAE for a list
+    of all current disks and their contents.
+    
+    All disks branded, High Density 3.5" (1.4Meg)
+    
+    Disk 1.     Latest versions of PLAY, RESPLAY and MODPLAY
+    Disk 2,3,4  Various Tracker modules
+    
+    My address is at the end of this document. PS It took me 9 solid days
+    to write this, and 3 hours to document - I hope this makes you feel
+    guilty :-)
+    
+Credits:
+--------
+
+    Many thanks must go to Mahoney & Kaktus for their Amiga assembler 
+    noisetracker replay routine which provided much inspiration and 
+    help with the module format and effects.
+
+Bugs:
+-----
+
+    Will not load modules that have samples greater than 64k.  I have found
+    that this only applies to about 5% of modules.  I wrote the routine to
+    be quick and at the time was told the maximum in a module was 64k, I later
+    found that that the maximum was 128k and this would mean a rewrite of two
+    essential routines.  I will get round to it eventually. The LOOP effect
+    seems to work on most modules - some modules it doesn't.  I'm looking into
+    this one.
+_____________________________________________________________________________
+
+Copyright/License/Warranty
+--------------------------
+
+    This document and the program file MODPLAY.COM ("the software") are
+    copyrighted by the author.  The copyright owner hereby licenses
+    you to: use the software; make as many copies of the program
+    and documentation as you wish; give such copies to anyone; and
+    distribute the software and documentation via electronic means.
+    There is no charge for any of the above.
+    
+    You are specifically prohibited from charging, or requesting
+    donations, for any such copies, however made; and from
+    distributing the software and/or documentation with commercial
+    products without prior permission.
+    
+    NO FOR-PROFIT ORGANIZATION IS AUTHORIZED TO CHARGE ANY AMOUNT
+    FOR DISTRIBUTION OF COPIES OF THE SOFTWARE OR DOCUMENTATION,
+    OR TO INCLUDE COPIES OF THE SOFTWARE OR DOCUMENTATION WITH SALES
+    OF THEIR OWN PRODUCTS.
+    
+    THIS INCLUDES A SPECIFIC PROHIBITION AGAINST FOR-PROFIT
+    ORGANIZATIONS DISTRIBUTING THE SOFTWARE, EITHER ALONE OR WITH
+    OTHER SOFTWARE, AND CHARGING A "HANDLING" OR "MATERIALS" FEE OR
+    ANY OTHER SUCH FEE FOR THE DISTRIBUTION.  NO FOR-PROFIT
+    ORGANIZATION IS AUTHORIZED TO INCLUDE THE SOFTWARE ON ANY MEDIA
+    FOR WHICH MONEY IS CHARGED WITHOUT PRIOR PERMISSION FROM THE
+    COPYRIGHT OWNER.
+    
+    No copy of the software may be distributed or given away without
+    this document; and neither the program or document may be altered
+    in any way.
+    
+    There is no warranty of any kind, and the copyright owner is not
+    liable for damages of any kind.  By using this free software,
+    you agree to this.
+    
+    The software and documentation are:
+
+    Copyright (C) 1990/1991       Mark J Cox
+
+    All trademarks/registered names acknowledged.
+_____________________________________________________________________________
+    
+Address:
+--------
+
+    Mark J Cox                 Electronic Mail: mark@awe.com
+
+    All comments on PLAY, RESPLAY, MODPLAY or future software is welcomed!
